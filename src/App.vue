@@ -7,11 +7,11 @@
           <router-link to="/about">About</router-link>
         </div>
         <div class="nav-item">
-          <el-input placeholder="请输入内容" v-model="search" clearable></el-input>
+          <el-input placeholder="请输入内容" v-model="search" clearable @keyup.native.enter="a"></el-input>
           <el-button icon="el-icon-search" type="primary" plain native-type="submit"></el-button>
         </div>
         <div class="nav-item">
-          <el-button type="primary" round plain>登录</el-button>
+          <el-button type="primary" round plain @click="a">登录</el-button>
         </div>
       </div>
     </div>
@@ -46,7 +46,11 @@
     padding: 10px;
     justify-content: space-between;
     align-items: center;
+    &>.nav-item:nth-of-type(1)>a{
+      margin:0 5px;
+    }
     &>.nav-item:nth-of-type(2){
+      display: flex;
       &>button{
         margin-left: -3px;
       }
@@ -68,6 +72,11 @@ export default {
     return {
       search: ""
     };
+  },
+  methods:{
+    a:()=>{
+      alert("hellao")
+    }
   }
 };
 </script>>
