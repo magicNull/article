@@ -4,7 +4,7 @@
       <div class="nav-group">
         <div class="nav-item">
           <router-link to="/">首页</router-link>
-          <router-link to="/about">About</router-link>
+          <router-link to="/about">排行榜</router-link>
         </div>
         <div class="nav-item">
           <el-input placeholder="请输入内容" v-model="search" clearable @keyup.native.enter="a"></el-input>
@@ -16,6 +16,9 @@
       </div>
     </div>
     <router-view />
+    <div id="go_top" v-show="css_top==true" @click="go_top">
+      <i class="el-icon-caret-top"></i>
+    </div>
   </div>
 </template>
 
@@ -46,12 +49,12 @@
     padding: 10px;
     justify-content: space-between;
     align-items: center;
-    &>.nav-item:nth-of-type(1)>a{
-      margin:0 5px;
+    & > .nav-item:nth-of-type(1) > a {
+      margin: 0 5px;
     }
-    &>.nav-item:nth-of-type(2){
+    & > .nav-item:nth-of-type(2) {
       display: flex;
-      &>button{
+      & > button {
         margin-left: -3px;
       }
     }
@@ -65,18 +68,58 @@
     }
   }
 }
+#go_top {
+  position: fixed;
+  right: 100px;
+  bottom: 100px;
+  color: #409eff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  box-shadow: 2px 2px 10px rgba($color: #000000, $alpha: 0.1);
+  cursor: pointer;
+  transition: 0.3s;
+  background-color: #fff;
+}
 </style>
 <script>
 export default {
   data() {
     return {
-      search: ""
+      search: "",
+      css_top: false
     };
   },
-  methods:{
-    a:()=>{
-      alert("hellao")
+  methods: {
+    a: () => {
+      alert("hellao");
+    },
+    go_top() {
+      let time = setInterval(() => {
+        document.documentElement.scrollTop -= 20;
+        if (window.scrollY == 0) {
+          this.$data.css_top = false;
+          clearInterval(time);
+        }
+      }, 10);
+    },
+    css_top_func() {
+      let y = window.scrollY;
+      if (y > 100) {
+        this.$data.css_top = true;
+      }else if(y<100){
+        this.$data.css_top = false;
+
+      }
     }
+  },
+  mounted() {
+    window.addEventListener("scroll", this.css_top_func);
+  },
+  destroyed() {
+    window.removeEventListener("scroll", this.css_top_func);
   }
 };
 </script>>
