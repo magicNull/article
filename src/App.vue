@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click="test_id(0)">
     <div id="nav">
       <div class="nav-group">
         <div class="nav-item">
@@ -109,14 +109,25 @@ export default {
       let y = window.scrollY;
       if (y > 100) {
         this.$data.css_top = true;
-      }else if(y<100){
+      } else if (y < 100) {
         this.$data.css_top = false;
-
       }
+    },
+    user_session() {
+      let user = {
+        name: "张三",
+        imgPath: "img/1.jpg",
+        id: "123",
+        token: "sdfsadf12312"
+      };
+      window.localStorage.setItem("user", JSON.stringify(user));
+    },test_id(id){
+      this.$store.commit("changCss_show_id",id)
     }
   },
   mounted() {
     window.addEventListener("scroll", this.css_top_func);
+    this.user_session();
   },
   destroyed() {
     window.removeEventListener("scroll", this.css_top_func);
