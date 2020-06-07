@@ -11,7 +11,29 @@
           <el-button icon="el-icon-search" type="primary" plain native-type="submit"></el-button>
         </div>
         <div class="nav-item">
-          <el-button type="primary" round plain @click="a">登录</el-button>
+          <el-button
+            type="primary"
+            round
+            plain
+            v-if="this.$store.state.userTokenLong == 'null'||this.$store.state.userTokenLong == ''"
+          >
+            <router-link to="/login">登录</router-link>
+          </el-button>
+          <div v-else>
+            <el-dropdown @command="command">
+              <span class="el-dropdown-link">
+                <el-avatar
+                  shape="circle"
+                  size="medium"
+                  src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+                ></el-avatar>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item icon="el-icon-user-solid" command="1"><router-link to="/user" style="text-decoration:none;color:#000;">个人中心</router-link></el-dropdown-item>
+                <el-dropdown-item icon="el-icon-switch-button" command="2">注销</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
         </div>
       </div>
     </div>
@@ -85,6 +107,7 @@
 }
 </style>
 <script>
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -93,6 +116,22 @@ export default {
     };
   },
   methods: {
+    command(e) {
+      switch (parseInt(e)) {
+        case 1:
+          break;
+        case 2:
+          //退出登录
+          // console.log(this.changeUserToken(''));
+          this.$store.commit('changeUserTokenLong','');
+          sessionStorage.removeItem('userTokenLong');
+          this.$router.push({name:'Login'})
+          break;
+        default:
+          break;
+      }
+      // this.$message('click on item ' + command);
+    },
     a: () => {
       alert("hellao");
     },
@@ -121,9 +160,10 @@ export default {
         token: "sdfsadf12312"
       };
       window.localStorage.setItem("user", JSON.stringify(user));
-    },test_id(id){
-      this.$store.commit("changCss_show_id",id)
-    }
+    },
+    test_id(id) {
+      this.$store.commit("changCss_show_id", id);
+    },
   },
   mounted() {
     window.addEventListener("scroll", this.css_top_func);
@@ -131,6 +171,9 @@ export default {
   },
   destroyed() {
     window.removeEventListener("scroll", this.css_top_func);
+  },
+  computed: {
+    ...mapGetters(["getUserToken"])
   }
 };
 </script>>
